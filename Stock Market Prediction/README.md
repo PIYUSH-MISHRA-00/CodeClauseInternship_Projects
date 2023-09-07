@@ -15,7 +15,7 @@ Stock Market Prediction is a project that uses machine learning to predict stock
 
   You can view the results of the stock market predictions in the notebooks provided. Additionally, you can visualize the predictions using the included visualization tools.
 
-  # How to use the APP
+  # How to use the App
   
   * Just go the project directory and run the following command from the terminal.
 
