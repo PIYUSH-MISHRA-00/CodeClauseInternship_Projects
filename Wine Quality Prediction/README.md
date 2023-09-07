@@ -1,3 +1,5 @@
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+
 # Wine Quality Prediction
 
 Wine Quality Prediction is a machine learning project that predicts the quality of wine based on various chemical and physical features. This project is implemented using Python and popular libraries like scikit-learn, pandas, and matplotlib.
