@@ -1,3 +1,5 @@
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+
 # Stock Market Prediction
 
 Stock Market Prediction is a project that uses machine learning to predict stock prices based on historical data. This project is implemented using Python and various libraries, including scikit-learn, pandas, and matplotlib.
