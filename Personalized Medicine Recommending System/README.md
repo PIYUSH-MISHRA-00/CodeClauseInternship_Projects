@@ -30,7 +30,7 @@ pip install -r requirements.txt
 
 Run the Streamlit app:
 ```
-streamlit run app.py
+streamlit run medicine.py
 ```
 
 - Access the app in your web browser.
