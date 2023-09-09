@@ -1,103 +1,53 @@
 import streamlit as st
 import pickle
-import matplotlib.pyplot as plt
-import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
-# Load the quality and price prediction models
-quality_model = pickle.load(open("quality_model.pkl", "rb"))
-price_model = pickle.load(open("price_model.pkl", "rb"))
+# Load the quality prediction model
+quality_model = pickle.load(open("model/quality_model.pkl", "rb"))
 
 # Streamlit UI
-st.title("Wine Quality and Price Prediction App")
+st.title("Wine Quality Prediction App")
 
-# Sidebar menu to select prediction type
-selected_option = st.sidebar.selectbox("Select prediction type:", ["Quality Prediction", "Price Prediction", "Feature Comparison", "Predict from CSV"])
+st.header("Quality Prediction")
 
-if selected_option == "Quality Prediction":
-    st.header("Quality Prediction")
-    # Input fields for quality prediction
-    # Replace with relevant feature input fields (e.g., Rating, NumberOfRatings, etc.)
-    rating = st.number_input("Enter Rating:")
-    num_of_ratings = st.number_input("Enter Number of Ratings:")
+# Input sliders for wine features
+fixed_acidity = st.slider("Fixed Acidity:", 4.0, 15.9, 8.0, 0.1)
+volatile_acidity = st.slider("Volatile Acidity:", 0.12, 1.58, 0.5, 0.01)
+citric_acid = st.slider("Citric Acid:", 0.0, 1.0, 0.5, 0.01)
+residual_sugar = st.slider("Residual Sugar:", 0.9, 15.5, 2.0, 0.1)
+chlorides = st.slider("Chlorides:", 0.01, 0.6, 0.08, 0.01)
+free_sulfur_dioxide = st.slider("Free Sulfur Dioxide:", 1, 72, 20, 1)
+total_sulfur_dioxide = st.slider("Total Sulfur Dioxide:", 6, 289, 100, 1)
+density = st.slider("Density:", 0.99, 1.01, 1.0, 0.001)
+pH = st.slider("pH:", 2.74, 4.01, 3.0, 0.01)
+sulphates = st.slider("Sulphates:", 0.33, 2.0, 0.6, 0.01)
+alcohol = st.slider("Alcohol:", 8.4, 14.9, 11.0, 0.1)
 
-    if st.button("Predict Quality"):
-        # Use the quality prediction model to make predictions
-        quality_prediction = quality_model.predict([[rating, num_of_ratings]])[0]
-        st.write(f"Predicted Quality: {quality_prediction:.2f}")
+if st.button("Predict Quality"):
+    # Prepare input data for prediction
+    input_data = np.array([[
+        fixed_acidity, volatile_acidity, citric_acid, 
+        residual_sugar, chlorides, free_sulfur_dioxide, 
+        total_sulfur_dioxide, density, pH, sulphates, alcohol
+    ]])
 
-        # Pie chart for quality distribution
-        quality_counts = [0, 0, 0]  # Replace with actual counts for different quality levels
-        labels = ["Low", "Medium", "High"]
-        fig, ax = plt.subplots()
-        ax.pie(quality_counts, labels=labels, autopct='%1.1f%%', startangle=90)
-        ax.axis('equal')
-        st.pyplot(fig)
+    # Use the quality prediction model to make predictions
+    quality_prediction = quality_model.predict(input_data)[0]
+    
+    # Determine and display the prediction result
+    if quality_prediction == 1:
+        result_text = "Predicted Quality: Good"
+    else:
+        result_text = "Predicted Quality: Not Good"
+    
+    st.write(result_text)
 
-elif selected_option == "Price Prediction":
-    st.header("Price Prediction")
-    # Input fields for price prediction
-    # Replace with relevant feature input fields (e.g., Country, Region, etc.)
-    country = st.text_input("Enter Country:")
-    region = st.text_input("Enter Region:")
-
-    if st.button("Predict Price"):
-        # Use the price prediction model to make predictions
-        price_prediction = price_model.predict([[country, region]])[0]
-        st.write(f"Predicted Price: {price_prediction:.2f}")
-
-        # Pie chart for price range distribution
-        price_ranges = [0, 0, 0]  # Replace with actual counts for different price ranges
-        labels = ["Low", "Medium", "High"]
-        fig, ax = plt.subplots()
-        ax.pie(price_ranges, labels=labels, autopct='%1.1f%%', startangle=90)
-        ax.axis('equal')
-        st.pyplot(fig)
-
-elif selected_option == "Feature Comparison":
-    st.header("Feature Comparison")
-    # User input for two wine samples for feature comparison
-    # Replace with input fields for selecting two wine samples
-
-    # Display a table comparing the selected features of two wine samples
-    # Replace with code to compare selected features
-
-    # Pie chart showing the distribution of wine qualities for the selected samples
-    # Replace with code for creating a pie chart
-
-    # Explanation
-    st.subheader("Explanation")
-    st.write("You can use this section to compare the features of two wine samples and visualize the distribution of wine qualities for the selected samples.")
-
-elif selected_option == "Predict from CSV":
-    st.header("Predict from CSV")
-    # Input for user to upload a CSV file with wine parameters
-    uploaded_file = st.file_uploader("Upload a CSV file with wine parameters:", type=["csv"])
-
-    if uploaded_file is not None:
-        user_data = pd.read_csv(uploaded_file)
-        user_quality_predictions = user_data.apply(lambda row: quality_model.predict([row])[0], axis=1)
-        user_price_predictions = user_data.apply(lambda row: price_model.predict([row])[0], axis=1)
-        user_data["Predicted Quality"] = user_quality_predictions
-        user_data["Predicted Price"] = user_price_predictions
-
-        st.write("User-Provided Data with Predictions:")
-        st.write(user_data)
-
-        # Pie chart for quality distribution
-        quality_counts = user_data["Predicted Quality"].value_counts()
-        fig1, ax1 = plt.subplots()
-        ax1.pie(quality_counts, labels=quality_counts.index, autopct='%1.1f%%', startangle=90)
-        ax1.axis('equal')
-        st.pyplot(fig1)
-
-        # Pie chart for price range distribution
-        price_ranges = user_data["Predicted Price"].value_counts()
-        fig2, ax2 = plt.subplots()
-        ax2.pie(price_ranges, labels=price_ranges.index, autopct='%1.1f%%', startangle=90)
-        ax2.axis('equal')
-        st.pyplot(fig2)
-
-        # Explanation
-        st.subheader("Explanation")
-        st.write("You can upload a CSV file with wine parameters, and the app will predict both quality and price for each entry in the file. The predictions are visualized with pie charts.")
+    # Quality distribution chart
+    st.subheader("Quality Distribution")
+    quality_counts = quality_model.predict(np.random.rand(1000, 11))
+    plt.hist(quality_counts, bins=[0, 1, 2], align='left', rwidth=0.6)
+    plt.xticks([0, 1], ["Not Good", "Good"])
+    plt.xlabel("Quality")
+    plt.ylabel("Count")
+    st.pyplot(plt)
