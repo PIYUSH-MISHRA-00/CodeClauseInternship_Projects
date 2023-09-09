@@ -21,7 +21,7 @@ pip install -r requirements.txt
 To run the Wine Quality Prediction App, use the following command:
 
 ```
-streamlit run app.py
+streamlit run wine.py
 ```
 
 This will start the Streamlit app locally, and you can access it in your web browser.
