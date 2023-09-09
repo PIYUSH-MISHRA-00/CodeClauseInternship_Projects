@@ -1,3 +1,5 @@
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)![Jupyter Notebook](https://img.shields.io/badge/jupyter-%23FA0F00.svg?style=for-the-badge&logo=jupyter&logoColor=white)
+
 # Wine Quality Prediction
 
 This is a simple Streamlit web application for predicting the quality of wine based on its features. It uses a machine learning model to make predictions.
